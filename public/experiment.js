@@ -278,11 +278,14 @@ all_sequences.forEach(sequence => {
         if (response[i] === sequence[i]) correct++;
       }
 
-      data.sequence = sequence;
-      data.recall = response;
-      data.accuracy = correct / sequence.length;
-      data.compressibility = comp.score;
-      data.pattern_type = comp.type;
+      // Save all relevant data for analysis
+      data.sequence = sequence;           // Expected (what was shown)
+      data.recall = response;             // Input (what they typed)
+      data.correct_count = correct;       // Number of letters correct
+      data.total_letters = sequence.length; // Total letters (7)
+      data.accuracy = correct / sequence.length; // Proportion correct (0-1)
+      data.compressibility = comp.score;  // Compressibility score (0-3)
+      data.pattern_type = comp.type;      // Pattern type (REPEAT, GROUP, RUN, MIRROR, RANDOM)
 
       trial_count++;
       jsPsych.progressBar.progress = trial_count / total_trials;
