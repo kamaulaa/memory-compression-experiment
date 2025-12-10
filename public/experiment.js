@@ -165,15 +165,22 @@ const practice_display = {
 
 const practice_recall = {
   type: jsPsychSurveyHtmlForm,
-  preamble: "<p>Type what you remember (10 seconds). Press Enter to submit:</p>",
+  preamble: '<p>Type what you remember. Press Enter to submit:</p><p id="timer" style="font-size: 24px; font-weight: bold;">10</p>',
   html: '<input type="text" id="practice_recall" name="practice_recall" autocomplete="off" autofocus style="font-size: 24px; padding: 10px; width: 300px; text-transform: uppercase;">',
   button_label: "Submit",
   autofocus: "practice_recall",
   on_load: function() {
-    setTimeout(() => {
-      const btn = document.querySelector("#jspsych-survey-html-form-next");
-      if (btn) btn.click();
-    }, 10000);
+    let timeLeft = 10;
+    const timerEl = document.getElementById("timer");
+    const countdown = setInterval(() => {
+      timeLeft--;
+      if (timerEl) timerEl.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        const btn = document.querySelector("#jspsych-survey-html-form-next");
+        if (btn) btn.click();
+      }
+    }, 1000);
   }
 };
 
@@ -221,15 +228,22 @@ all_sequences.forEach(sequence => {
   // ---- RECALL ----
   real_trials.push({
     type: jsPsychSurveyHtmlForm,
-    preamble: "<p>Type what you remember (10 seconds). Press Enter to submit:</p>",
+    preamble: '<p>Type what you remember. Press Enter to submit:</p><p id="timer" style="font-size: 24px; font-weight: bold;">10</p>',
     html: '<input type="text" id="recall" name="recall" autocomplete="off" autofocus style="font-size: 24px; padding: 10px; width: 300px; text-transform: uppercase;">',
     button_label: "Submit",
     autofocus: "recall",
     on_load: function() {
-      setTimeout(() => {
-        const btn = document.querySelector("#jspsych-survey-html-form-next");
-        if (btn) btn.click();
-      }, 10000);
+      let timeLeft = 10;
+      const timerEl = document.getElementById("timer");
+      const countdown = setInterval(() => {
+        timeLeft--;
+        if (timerEl) timerEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(countdown);
+          const btn = document.querySelector("#jspsych-survey-html-form-next");
+          if (btn) btn.click();
+        }
+      }, 1000);
     },
 
     on_finish: function (data) {
