@@ -173,7 +173,7 @@ const practice_recall = {
     setTimeout(() => {
       const btn = document.querySelector("#jspsych-survey-html-form-next");
       if (btn) btn.click();
-    }, 12000);
+    }, 10000);
   }
 };
 
@@ -229,7 +229,7 @@ all_sequences.forEach(sequence => {
       setTimeout(() => {
         const btn = document.querySelector("#jspsych-survey-html-form-next");
         if (btn) btn.click();
-      }, 12000);
+      }, 10000);
     },
 
     on_finish: function (data) {
