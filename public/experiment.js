@@ -172,15 +172,25 @@ const practice_recall = {
   on_load: function() {
     let timeLeft = 10;
     const timerEl = document.getElementById("timer");
-    const countdown = setInterval(() => {
+    
+    // Clear any existing timer
+    if (window.recallTimer) clearInterval(window.recallTimer);
+    
+    window.recallTimer = setInterval(() => {
       timeLeft--;
       if (timerEl) timerEl.textContent = timeLeft;
       if (timeLeft <= 0) {
-        clearInterval(countdown);
+        clearInterval(window.recallTimer);
         const btn = document.querySelector("#jspsych-survey-html-form-next");
         if (btn) btn.click();
       }
     }, 1000);
+    
+    // Clear timer when form is submitted
+    const form = document.querySelector("#jspsych-survey-html-form");
+    if (form) {
+      form.addEventListener("submit", () => clearInterval(window.recallTimer));
+    }
   }
 };
 
@@ -235,15 +245,25 @@ all_sequences.forEach(sequence => {
     on_load: function() {
       let timeLeft = 10;
       const timerEl = document.getElementById("timer");
-      const countdown = setInterval(() => {
+      
+      // Clear any existing timer
+      if (window.recallTimer) clearInterval(window.recallTimer);
+      
+      window.recallTimer = setInterval(() => {
         timeLeft--;
         if (timerEl) timerEl.textContent = timeLeft;
         if (timeLeft <= 0) {
-          clearInterval(countdown);
+          clearInterval(window.recallTimer);
           const btn = document.querySelector("#jspsych-survey-html-form-next");
           if (btn) btn.click();
         }
       }, 1000);
+      
+      // Clear timer when form is submitted
+      const form = document.querySelector("#jspsych-survey-html-form");
+      if (form) {
+        form.addEventListener("submit", () => clearInterval(window.recallTimer));
+      }
     },
 
     on_finish: function (data) {
