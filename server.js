@@ -60,8 +60,11 @@ app.post("/save-data", async (req, res) => {
   }
 
   // Send email with CSV attachment
+  console.log(`📧 Attempting email... EMAIL_USER set: ${!!EMAIL_USER}, EMAIL_PASS set: ${!!EMAIL_PASS}`);
+  
   if (EMAIL_USER && EMAIL_PASS) {
     try {
+      console.log(`📧 Sending to: ${EMAIL_TO}`);
       await transporter.sendMail({
         from: EMAIL_USER,
         to: EMAIL_TO,
@@ -76,7 +79,7 @@ app.post("/save-data", async (req, res) => {
       });
       console.log(`✅ Email sent for ${netid}`);
     } catch (emailErr) {
-      console.error("Email error:", emailErr);
+      console.error("❌ Email error:", emailErr.message);
     }
   } else {
     console.log("⚠️ Email not configured (missing EMAIL_USER/EMAIL_PASS)");
