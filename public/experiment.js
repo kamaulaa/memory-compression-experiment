@@ -167,9 +167,14 @@ const practice_recall = {
   type: jsPsychSurveyHtmlForm,
   preamble: "<p>Type what you remember (10 seconds). Press Enter to submit:</p>",
   html: '<input type="text" id="practice_recall" name="practice_recall" autocomplete="off" autofocus style="font-size: 24px; padding: 10px; width: 300px; text-transform: uppercase;">',
-  trial_duration: 10000,
   button_label: "Submit",
-  autofocus: "practice_recall"
+  autofocus: "practice_recall",
+  on_load: function() {
+    setTimeout(() => {
+      const btn = document.querySelector("#jspsych-survey-html-form-next");
+      if (btn) btn.click();
+    }, 10000);
+  }
 };
 
 // ================================
@@ -218,9 +223,14 @@ all_sequences.forEach(sequence => {
     type: jsPsychSurveyHtmlForm,
     preamble: "<p>Type what you remember (10 seconds). Press Enter to submit:</p>",
     html: '<input type="text" id="recall" name="recall" autocomplete="off" autofocus style="font-size: 24px; padding: 10px; width: 300px; text-transform: uppercase;">',
-    trial_duration: 10000,
     button_label: "Submit",
     autofocus: "recall",
+    on_load: function() {
+      setTimeout(() => {
+        const btn = document.querySelector("#jspsych-survey-html-form-next");
+        if (btn) btn.click();
+      }, 10000);
+    },
 
     on_finish: function (data) {
       // Handle case where response might be null/undefined (timeout with no input)
