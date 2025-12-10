@@ -81,17 +81,33 @@ app.post("/save-data", async (req, res) => {
   const participant_number = data[0].participant_number;
   const netid = data[0].netid;
 
+  // Filter to only recall trials (they have sequence and recall fields)
+  const recallTrials = data.filter(row => row.sequence && row.recall !== undefined);
+
   const filename = `p${participant_number}_${netid}_memory.csv`;
   const filepath = path.join(__dirname, "data", filename);
 
-  const headers = Object.keys(data[0]).map(key => ({
-    id: key,
-    title: key
-  }));
+  // Define only the columns we want
+  const headers = [
+    { id: "participant_number", title: "participant_number" },
+    { id: "netid", title: "netid" },
+    { id: "sequence", title: "sequence" },
+    { id: "recall", title: "recall" },
+    { id: "correct_count", title: "correct_count" },
+    { id: "total_letters", title: "total_letters" },
+    { id: "accuracy", title: "accuracy" },
+    { id: "compressibility", title: "compressibility" },
+    { id: "pattern_type", title: "pattern_type" },
+    { id: "rt_seconds", title: "rt_seconds" }
+  ];
 
   // Convert data to CSV string
   const csvHeader = headers.map(h => h.title).join(",");
-  const csvRows = data.map(row => headers.map(h => `"${(row[h.id] || "").toString().replace(/"/g, '""')}"`).join(","));
+  const csvRows = recallTrials.map(row => headers.map(h => {
+    const val = row[h.id];
+    if (val === null || val === undefined) return '""';
+    return `"${val.toString().replace(/"/g, '""')}"`;
+  }).join(","));
   const csvContent = [csvHeader, ...csvRows].join("\n");
 
   // Save locally (works on local, ephemeral on Render)
@@ -101,8 +117,8 @@ app.post("/save-data", async (req, res) => {
   });
 
   try {
-    await csvWriter.writeRecords(data);
-    console.log(`✅ Data saved locally: ${filename}`);
+    await csvWriter.writeRecords(recallTrials);
+    console.log(`✅ Data saved locally: ${filename} (${recallTrials.length} trials)`);
   } catch (err) {
     console.error("Local save error:", err);
   }
@@ -110,7 +126,7 @@ app.post("/save-data", async (req, res) => {
   // Push to GitHub
   await pushToGitHub(filename, csvContent);
 
-  res.json({ status: "success", filename });
+  res.json({ status: "success", filename, trials: recallTrials.length });
 });
 
 app.listen(PORT, () => {

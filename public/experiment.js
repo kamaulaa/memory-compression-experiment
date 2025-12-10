@@ -286,6 +286,7 @@ all_sequences.forEach(sequence => {
       data.accuracy = correct / sequence.length; // Proportion correct (0-1)
       data.compressibility = comp.score;  // Compressibility score (0-3)
       data.pattern_type = comp.type;      // Pattern type (REPEAT, GROUP, RUN, MIRROR, RANDOM)
+      data.rt_seconds = data.rt / 1000;   // Response time in seconds
 
       trial_count++;
       jsPsych.progressBar.progress = trial_count / total_trials;
