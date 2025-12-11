@@ -125,9 +125,9 @@ app.post("/save-data", async (req, res) => {
   }
 
   // Push to GitHub
-  await pushToGitHub(filename, csvContent);
+  const githubSaved = await pushToGitHub(filename, csvContent);
 
-  res.json({ status: "success", filename, trials: recallTrials.length });
+  res.json({ status: "success", filename, trials: recallTrials.length, github_saved: githubSaved });
 });
 
 app.listen(PORT, () => {

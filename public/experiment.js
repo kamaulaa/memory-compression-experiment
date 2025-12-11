@@ -2,6 +2,16 @@
 // INIT jsPsych + SERVER UPLOAD
 // ================================
 
+// Warn user before leaving page
+let experimentFinished = false;
+window.addEventListener('beforeunload', function (e) {
+  if (!experimentFinished) {
+    e.preventDefault();
+    e.returnValue = 'Your data has not been saved! Are you sure you want to leave?';
+    return e.returnValue;
+  }
+});
+
 const jsPsych = initJsPsych({
   show_progress_bar: true,
   auto_update_progress_bar: false,
@@ -13,8 +23,20 @@ const jsPsych = initJsPsych({
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
-    }).then(() => {
-      console.log("✅ Data successfully sent to server.");
+    })
+    .then(response => response.json())
+    .then(result => {
+      experimentFinished = true;
+      if (result.github_saved) {
+        console.log("✅ Data saved to GitHub successfully.");
+      } else {
+        console.error("⚠️ Data saved locally only - GitHub save failed!");
+        alert("⚠️ Warning: Data may not have been saved to GitHub. Please notify the experimenter.");
+      }
+    })
+    .catch(err => {
+      console.error("❌ Failed to save data:", err);
+      alert("❌ Error: Data may not have been saved. Please notify the experimenter.");
     });
   }
 });
