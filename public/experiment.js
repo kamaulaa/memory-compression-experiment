@@ -309,6 +309,11 @@ const strategy_question = {
         ]
       }
     ]
+  },
+  on_finish: function(data) {
+    // Save strategy to all data rows
+    const strategy = data.response && data.response.strategy ? data.response.strategy : "";
+    jsPsych.data.addProperties({ strategy: strategy });
   }
 };
 
@@ -327,6 +332,16 @@ const end_screen = {
   choices: ["Finish"]
 };
 
+const close_screen = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <h2>Data Submitted Successfully</h2>
+    <p>Your responses have been recorded.</p>
+    <p>You may now close this window.</p>
+  `,
+  choices: "NO_KEYS"
+};
+
 // ================================
 // RUN EXPERIMENT
 // ================================
@@ -340,5 +355,6 @@ jsPsych.run([
   practice_complete,
   ...real_trials,
   strategy_question,
-  end_screen
+  end_screen,
+  close_screen
 ]);

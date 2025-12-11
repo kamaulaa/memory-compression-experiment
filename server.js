@@ -98,7 +98,8 @@ app.post("/save-data", async (req, res) => {
     { id: "accuracy", title: "accuracy" },
     { id: "compressibility", title: "compressibility" },
     { id: "pattern_type", title: "pattern_type" },
-    { id: "rt_seconds", title: "rt_seconds" }
+    { id: "rt_seconds", title: "rt_seconds" },
+    { id: "strategy", title: "strategy" }
   ];
 
   // Convert data to CSV string
