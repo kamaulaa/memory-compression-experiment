@@ -351,7 +351,31 @@ const end_screen = {
     <p><b>⚠️ You MUST click "Finish" below to submit your data!</b></p>
     <p>Questions: <b>kr6550@princeton.edu</b></p>
   `,
-  choices: ["Finish"]
+  choices: ["Finish"],
+  on_finish: function() {
+    // Save data when Finish is clicked
+    const data = jsPsych.data.get().values();
+    
+    fetch("/save-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+      experimentFinished = true;
+      if (result.github_saved) {
+        console.log("✅ Data saved to GitHub successfully.");
+      } else {
+        console.error("⚠️ GitHub save failed!");
+        alert("⚠️ Warning: Data may not have been saved to GitHub. Please notify the experimenter.");
+      }
+    })
+    .catch(err => {
+      console.error("❌ Failed to save data:", err);
+      alert("❌ Error: Data may not have been saved. Please notify the experimenter.");
+    });
+  }
 };
 
 const close_screen = {
