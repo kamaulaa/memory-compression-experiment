@@ -321,6 +321,7 @@ const end_screen = {
   stimulus: `
     <h2>Task Complete</h2>
     <p>Thank you for participating.</p>
+    <p><b>⚠️ You MUST click "Finish" below to submit your data!</b></p>
     <p>Questions: <b>kr6550@princeton.edu</b></p>
   `,
   choices: ["Finish"]
